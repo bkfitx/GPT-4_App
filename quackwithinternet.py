@@ -15,6 +15,8 @@ from googlesearch import search
 import re
 from bs4 import BeautifulSoup
 
+from bs4 import BeautifulSoup
+
 
 
 load_dotenv()
@@ -77,11 +79,30 @@ def GPT4WithGoogle():
     search_results = []
 
     for results in search(query, tld="co.in", num=1, stop=1, pause=2):
+
+    for results in search(query, tld="co.in", num=1, stop=1, pause=2):
         search_results.append(results)
         conversation.append(results)
     
     page = requests.get(search_results[0])
     soup = BeautifulSoup(page.content, 'html.parser')
+    
+    textResults = soup.get_text()
+    textResults = textResults.strip()
+    textResults = textResults.replace("\n", " ")
+    textResults = textResults[:8000]
+    
+    page = requests.get(search_results[0])
+    soup = BeautifulSoup(page.content, 'html.parser')
+    updatedMessage = message + ". Use this data from the internet to answer the question: " + textResults
+    messages.append( {"role": "user", "content": updatedMessage} )
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=messages,
+        top_p=topP,
+        temperature=temp,                                                   
+        frequency_penalty=0.0,                                              
+        presence_penalty=0.0 )
     
     textResults = soup.get_text()
     textResults = textResults.strip()
