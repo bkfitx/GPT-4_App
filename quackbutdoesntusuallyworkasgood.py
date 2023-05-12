@@ -12,13 +12,17 @@ import wavio as wv
 from pydub import AudioSegment
 from dotenv import load_dotenv
 from googlesearch import search
+<<<<<<< HEAD
 import re
 from bs4 import BeautifulSoup
+=======
+>>>>>>> 575b407 (Create GPT-4_App)
 
 load_dotenv()
 terminalOutputs = []
 
 
+<<<<<<< HEAD
 
 def extract_quoted_content(rawQuery):
     pattern = r'"([^"]*)"'
@@ -87,6 +91,9 @@ def GPT4WithGoogle():
     conversation.append(textResults)
     return textResults    
 
+=======
+def sendAPICall():
+>>>>>>> 575b407 (Create GPT-4_App)
     messages.append( {"role": "user", "content": message} )
     response = openai.ChatCompletion.create(
         model="gpt-4",
@@ -160,6 +167,28 @@ def siriGPT():
     sound.export('finalOutput.mp3', format='mp3')
     print(sound)
 
+<<<<<<< HEAD
+=======
+def googleAPI(message, messages, conversation, topP, temp):
+    question = message
+    googleSearch = "whats a good google search to answer this question?" + question
+    messages.append( {"role": "user", "content": googleSearch} )
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=messages,
+        top_p=topP,
+        temperature=temp,                                                   
+        frequency_penalty=0.0,                                              
+        presence_penalty=0.0 )
+    
+    goodQuery = response["choices"][0]["message"]["content"]
+
+    query = goodQuery
+    for results in search(query, tld="co.in", num=10, stop=10, pause=2):
+        print(results)
+        conversation.append(results)
+        
+>>>>>>> 575b407 (Create GPT-4_App)
 ##extra encouragement;)
 messages = [
     {"role": "system", "content": "Hello, what can I do for you today?"},
@@ -184,7 +213,11 @@ mic_button = sg.Button("Audio Input", key="-RECORD-")
 send_button = sg.Button("Send")
 clear_button = sg.Button("Clear")
 quit_button = sg.Button("Quit")
+<<<<<<< HEAD
 internetsearch = sg.Checkbox("Search Internet", default=False, key="-SEARCH-")
+=======
+internetsearch = sg.Checkbox("Access Internet (Uses way too many tokens and hardly works)", default=False, key="-SEARCH-")
+>>>>>>> 575b407 (Create GPT-4_App)
 #tempSlider = sg.Text("Temperature:", font=fontS), sg.Slider(range=(0, 10), default_value=5, orientation='h', size=(34, 10), font=fontS, key="-SLIDER1-")
 #topPSlider = sg.Text("Top-P:", font=fontS), sg.Slider(range=(0, 10), default_value=5, orientation='h', size=(34, 10), font=fontS, key="-SLIDER2-")
 #recordingDuration = sg.Text("Recording Duration:", font=fontS), sg.Slider(range=(0, 10), default_value=5, orientation='h', size=(34, 10), font=fontS, key="-SLIDER3-")
@@ -195,7 +228,10 @@ TempAsk = 5
 TopPAsk = 5
 waddle_position = 0
 results = ""
+<<<<<<< HEAD
 textResults = ""
+=======
+>>>>>>> 575b407 (Create GPT-4_App)
 
 
 #define the layout of the GUI
@@ -291,6 +327,7 @@ while True:
 
     
     
+<<<<<<< HEAD
     if event == "Send":
         if values["-SEARCH-"] == True:
             GPT4WithGoogle()
@@ -305,6 +342,17 @@ while True:
             window["-OUTPUT-"].update(conversationString)
             window["-IN-"].update("")
             window["-INPUT-"].update("")
+=======
+    if values["-SEARCH-"] == True:
+        if event == "Send":
+            print("1")
+            message = "Whats a good google search to answer this question?: " + message
+        googleAPI()
+    
+    
+    
+    
+>>>>>>> 575b407 (Create GPT-4_App)
     
     
 
@@ -315,7 +363,13 @@ while True:
     if "L>" in message:
         whisper_transcript()
 
+<<<<<<< HEAD
 
+=======
+    if event == "Send":
+        sendAPICall()
+        
+>>>>>>> 575b407 (Create GPT-4_App)
     
     """ remember to fix this later!!!
     #Create photo with DALL-E
