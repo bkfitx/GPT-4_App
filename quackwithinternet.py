@@ -21,12 +21,14 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 
+
 terminalOutputs = []
 
 def extract_quoted_content(rawQuery):
     pattern = r'"([^"]*)"'
     matches = re.findall(pattern, rawQuery)
     return matches
+
 
 
 
@@ -44,7 +46,10 @@ def GPT4():
             presence_penalty=0.0 )
         
     else:
-        messages.append( {"role": "user", "content": message} )
+        
+    if values["-SEARCH-"] == True:
+        updatedMessage = "Use this data to answer the following question: " + textResults + "Question: " + message
+        messages.append( {"role": "user", "content": updatedMessage} )
         response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=messages,
@@ -52,6 +57,16 @@ def GPT4():
             temperature=temp,                                                   
             frequency_penalty=0.0,                                              
             presence_penalty=0.0 )
+        
+    else:
+        messages.append( {"role": "user", "content": message} )
+            response = openai.ChatCompletion.create(
+                model="gpt-4",
+                messages=messages,
+                top_p=topP,
+                temperature=temp,                                                   
+                frequency_penalty=0.0,                                              
+                presence_penalty=0.0 )
     
     reply = response["choices"][0]["message"]["content"]
     messages.append({"role": "assistant", "content": reply})
@@ -146,7 +161,7 @@ TempAsk = 5
 TopPAsk = 5
 waddle_position = 0
 results = ""
-textResults = ""
+textResults = ""textResults = ""
 
 #define the layout of the GUI
 layout = [[sg.Menu(menu)],
@@ -244,7 +259,7 @@ while True:
         if values["-SEARCH-"] == True:
             GPT4WithGoogle()
             conversationString = "\n \n".join(conversation)
-            GPT4()
+            GPT4()            GPT4()
             window["-OUTPUT-"].update(conversationString)
             window["-IN-"].update("")
             window["-INPUT-"].update("")
