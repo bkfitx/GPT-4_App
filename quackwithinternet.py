@@ -21,7 +21,6 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 
-
 terminalOutputs = []
 
 def extract_quoted_content(rawQuery):
