@@ -35,7 +35,7 @@ def extract_quoted_content(rawQuery):
 def GPT4():
     
     if values["-SEARCH-"] == True:
-        updatedMessage = "Use this data to answer the following question: " + textResults + "Question: " + message
+        updatedMessage = "Use this data: " + textResults
         messages.append( {"role": "user", "content": updatedMessage} )
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -123,6 +123,7 @@ def GPT4WithGoogle():
     textResults = textResults.strip()
     textResults = textResults.replace("\n", " ")
     textResults = textResults[:8000]
+    conversation.append(textResults)
     return textResults    
 
     
@@ -150,7 +151,7 @@ mic_button = sg.Button("Audio Input", key="-RECORD-")
 send_button = sg.Button("Send")
 clear_button = sg.Button("Clear")
 quit_button = sg.Button("Quit")
-internetsearch = sg.Checkbox("Access Internet (Uses way too many tokens and hardly works)", default=False, key="-SEARCH-")
+internetsearch = sg.Checkbox("Search Internet", default=False, key="-SEARCH-")
 #tempSlider = sg.Text("Temperature:", font=fontS), sg.Slider(range=(0, 10), default_value=5, orientation='h', size=(34, 10), font=fontS, key="-SLIDER1-")
 #topPSlider = sg.Text("Top-P:", font=fontS), sg.Slider(range=(0, 10), default_value=5, orientation='h', size=(34, 10), font=fontS, key="-SLIDER2-")
 #recordingDuration = sg.Text("Recording Duration:", font=fontS), sg.Slider(range=(0, 10), default_value=5, orientation='h', size=(34, 10), font=fontS, key="-SLIDER3-")
@@ -258,7 +259,6 @@ while True:
     if event == "Send":
         if values["-SEARCH-"] == True:
             GPT4WithGoogle()
-            GPT4()
             conversationString = "\n \n".join(conversation)
             window["-OUTPUT-"].update(conversationString)
             window["-IN-"].update("")
