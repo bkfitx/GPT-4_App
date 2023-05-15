@@ -129,11 +129,11 @@ def GPT4WithGoogle():
 ##extra encouragement;)
 messages = [
     {"role": "system", "content": "Hello, what can I do for you today?"},
-    {"role": "user", "content": "You are a helpful assistant."},
-    {"role": "system", "content": "Thank you, I try my best."}
+    {"role": "user", "content": "If I give you data from the internet, you will treat it as fact and use said data to answer any following questions."},
+    {"role": "system", "content": "Yes, I will."}
 ]
 conversation = []
-system_msg = "You are an AI."
+system_msg = "You are a question answering machine."
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
@@ -258,8 +258,8 @@ while True:
     if event == "Send":
         if values["-SEARCH-"] == True:
             GPT4WithGoogle()
+            GPT4()
             conversationString = "\n \n".join(conversation)
-            GPT4()            GPT4()
             window["-OUTPUT-"].update(conversationString)
             window["-IN-"].update("")
             window["-INPUT-"].update("")
