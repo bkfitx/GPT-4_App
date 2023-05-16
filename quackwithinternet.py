@@ -15,7 +15,6 @@ from googlesearch import search
 import re
 from bs4 import BeautifulSoup
 
-from bs4 import BeautifulSoup
 
 
 
@@ -33,19 +32,6 @@ def extract_quoted_content(rawQuery):
 
 def GPT4():
     
-    if values["-SEARCH-"] == True:
-        updatedMessage = "Use this data: " + textResults
-        messages.append( {"role": "user", "content": updatedMessage} )
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=messages,
-            top_p=topP,
-            temperature=temp,                                                   
-            frequency_penalty=0.0,                                              
-            presence_penalty=0.0 )
-        
-    else:
-        
     if values["-SEARCH-"] == True:
         updatedMessage = "Use this data to answer the following question: " + textResults + "Question: " + message
         messages.append( {"role": "user", "content": updatedMessage} )

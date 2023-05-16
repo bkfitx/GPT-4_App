@@ -87,27 +87,7 @@ def GPT4WithGoogle():
     conversation.append(textResults)
     return textResults    
 
-    messages.append( {"role": "user", "content": message} )
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=messages,
-        top_p=topP,
-        temperature=temp,                                                   
-        frequency_penalty=0.0,                                              
-        presence_penalty=0.0 )
     
-    reply = response["choices"][0]["message"]["content"]
-    messages.append({"role": "assistant", "content": reply})
-    print("\n" + reply + "\n")
-    
-        #output reply to GUI
-    conversation.append(reply)
-    conversationString = "\n \n".join(conversation)
-
-    window["-OUTPUT-"].update(conversationString)
-    window["-IN-"].update("")
-    window["-INPUT-"].update("")
-
 def generate_dall_e_image(prompt):
     headers = {
         'Content-Type': 'application/json',
@@ -301,7 +281,6 @@ while True:
         else:
             GPT4()
             conversationString = "\n \n".join(conversation)
-
             window["-OUTPUT-"].update(conversationString)
             window["-IN-"].update("")
             window["-INPUT-"].update("")
