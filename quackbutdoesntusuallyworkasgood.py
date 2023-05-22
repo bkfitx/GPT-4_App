@@ -112,7 +112,8 @@ def generate_dall_e_image(prompt):
         return None
 
 def whisper_transcript():
-        strippedLocation = message.split("L>")[1].strip()
+        
+        strippedLocation = docURL
         audioFile = open(strippedLocation, "rb")
         transcript = openai.Audio.transcribe("whisper-1", audioFile)
         transcript = str(transcript)
@@ -240,9 +241,10 @@ while True:
             
     
     docURL = values["-IN-"]
-    if event == "-IN-":
+    if values["-IN-"] != None:
         if ".mp3" in docURL:
-            message = ("L>" + docURL)
+            message = docURL
+            whisper_transcript()
         elif ".txt" in docURL:
             message = ("R>" + docURL)
         elif ".docx" in docURL:
@@ -291,8 +293,8 @@ while True:
     if "R>" in message:
         browse_textfiles()
     #TRANSCRIBE AUDIO INTO PROMPT
-    if "L>" in message:
-        whisper_transcript()
+    ##if "L>" in message:
+        ##whisper_transcript()
 
 
     
