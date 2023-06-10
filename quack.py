@@ -4,6 +4,7 @@ import docx2txt
 import PySimpleGUI as sg
 import sounddevice as sd
 from dotenv import load_dotenv
+import threading
 
 load_dotenv()
 terminalOutputs = []
@@ -21,6 +22,13 @@ def GPT4():
     messages.append({"role": "assistant", "content": reply})
     print("\n" + reply + "\n")
     conversation.append(reply)
+    conversationString = "\n \n".join(conversation)
+    window["-OUTPUT-"].update(conversationString)
+
+
+def run_GPT4_thread():
+    # This function will run in a separate thread
+    GPT4()
 
 def whisper_transcript():
         strippedLocation = message.split("L>")[1].strip()
@@ -148,9 +156,8 @@ while True:
     topP = (float(TopPAsk) * 0.1)
 
     if event == "Send":
-        GPT4()
-        conversationString = "\n \n".join(conversation)
-        window["-OUTPUT-"].update(conversationString)
+        conversation.append(values["-INPUT-"])
+        threading.Thread(target=run_GPT4_thread).start()
         window["-IN-"].update("")
         window["-INPUT-"].update("")
     
@@ -160,3 +167,6 @@ while True:
     #TRANSCRIBE AUDIO INTO PROMPT
     if "L>" in message:
         whisper_transcript()
+
+
+
