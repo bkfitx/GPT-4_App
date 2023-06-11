@@ -8,6 +8,8 @@ import threading
 
 load_dotenv()
 terminalOutputs = []
+inputPreview = "Input text here..."
+previewClear = False
 
 def GPT4():
     messages.append( {"role": "user", "content": message} )
@@ -71,11 +73,12 @@ send_button = sg.Button("Send")
 clear_button = sg.Button("Clear")
 quit_button = sg.Button("Quit")
 internetsearch = sg.Checkbox("Search Internet", default=False, key="-SEARCH-")
-mainInput = sg.Multiline("", size=(100,7), key="-INPUT-", font=fontB)
+mainInput = sg.Multiline(inputPreview, size=(100,7), key="-INPUT-", font=fontB, enable_events=True)
 secondaryInput = sg.Input(enable_events=True, key='-IN-',font=fontS, expand_x=True), sg.FileBrowse()
-mainOutput = sg.Multiline("", size=(100,24), key="-OUTPUT-", font=fontB)
+mainOutput = sg.Multiline("", size=(100,24), key="-OUTPUT-", font=fontB, disabled=True)
 TempAsk = 5
 TopPAsk = 5
+
 
 #define the layout of the GUI
 layout = [[sg.Menu(menu)],
@@ -121,6 +124,10 @@ while True:
             if TopPAsk == None:
                 TopPAsk = 5
             print("Top-P Changed")
+            break
+        elif event == "-INPUT-" and previewClear == False:
+            window["-INPUT-"].update("")
+            previewClear = True
             break
         else:
             break
