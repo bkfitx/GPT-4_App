@@ -140,7 +140,6 @@ while True:
     else:
         messagePreRep = values["-INPUT-"]
         message = messagePreRep.replace('\n',' ')
-        conversation.append(message)
         
     if event == "Clear":
         window["-INPUT-"].update("")
