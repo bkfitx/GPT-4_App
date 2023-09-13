@@ -1,5 +1,6 @@
 import openai
 import os
+import sys
 import docx2txt
 import PySimpleGUI as sg
 import sounddevice as sd
@@ -54,8 +55,11 @@ messages = [
 ]
 conversation = []
 system_msg = "You are an AI."
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_API_KEY
+OPENAI_API_KEY_fromApp = None
+
+OPENAI_API_KEY_fromEnv = os.getenv("OPENAI_API_KEY")
+
+    
 
 #customize the GUI
 sg.theme("DarkGreen2")
@@ -89,7 +93,7 @@ layout = [[sg.Menu(menu)],
 
 
 # Create the GUI window
-window = sg.Window("GPT-4", layout, size=(700, 700))
+window = sg.Window("GPT-4", layout, size=(700, 700), finalize=True)
 
 # Start the event loop
 while True:
@@ -99,11 +103,23 @@ while True:
         break
     
     while True: 
+        
+        if OPENAI_API_KEY_fromEnv != None:
+            openai.api_key = OPENAI_API_KEY_fromEnv
+        elif OPENAI_API_KEY_fromApp != None:
+            openai.api_key = OPENAI_API_KEY_fromApp
+        elif OPENAI_API_KEY_fromEnv == None and OPENAI_API_KEY_fromApp == None:
+            if getattr(sys, 'frozen', False):
+                application_path = sys._MEIPASS
+            else:
+                application_path = os.path.dirname(os.path.abspath(__file__))
+            openai.api_key_path = os.path.join(application_path, "APIKEY.txt")
+            
         if event == "Change API Key":
             APIASK = sg.popup_get_text("Please enter your API Key", title="API Key")
             print("Key = ", APIASK)
             if APIASK != None:
-                OPENAI_API_KEY = APIASK
+                OPENAI_API_KEY_fromApp = APIASK
             break
         elif event == "Show Terminal":
             TerminalContent = '\n'.join(terminalOutputs)
@@ -159,6 +175,7 @@ while True:
         threading.Thread(target=run_GPT4_thread).start()
         window["-IN-"].update("")
         window["-INPUT-"].update("")
+        window.refresh()
     
     #OPEN TEXT FILES
     if "R>" in message:
